@@ -1,0 +1,39 @@
+elytra:
+  # Prevents players from gliding with elytra while in combat.
+  # If the player spams the glide key repeatedly, their elytra will be
+  # force-unequipped from the chest slot and placed back once out of combat.
+  block_gliding: false
+
+  # Prevents players from using firework rockets to boost while gliding in combat.
+  block_fireworks: false
+
+  # Maximum firework rocket power level (1–3) allowed while gliding in combat.
+  # Set to -1 to impose no limit. Ignored entirely if block_fireworks is true.
+  firework_power_limit: -1
+
+remove_elytra_on_tag:
+  # When a player enters combat, automatically remove their elytra from
+  # their chestplate slot and find a free inventory slot to store it in.
+  # If no free slot exists, the elytra is dropped on the ground at the player's feet.
+  enabled: false
+
+  # When the elytra is dropped on the ground (because the inventory was full),
+  # only the combat-tagged player can pick it up for this many seconds.
+  # After this window expires, anyone can pick up the dropped item.
+  # This uses item metadata / custom tags to enforce pickup protection.
+  pickup_protection_seconds: 30
+
+block_equipping_elytra:
+  # Prevent a combat-tagged player from equipping an elytra.
+  # Blocks all equip methods: left-clicking in inventory, shift-clicking,
+  # dragging into the chestplate slot, and dispenser equipping.
+  enabled: true
+
+messages:
+  prefix: "&8[&bElytraFix&8] "
+  # Sent to the player when any elytra action is blocked due to combat.
+  blocked: "&cYou cannot use an elytra while in combat!"
+  # Sent when their elytra is removed and stored in inventory.
+  elytra_removed_to_inventory: "&eYour elytra has been moved to your inventory."
+  # Sent when their elytra is dropped because inventory was full.
+  elytra_dropped: "&cYour inventory was full! Your elytra has been dropped."

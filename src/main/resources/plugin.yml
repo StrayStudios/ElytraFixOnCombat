@@ -1,0 +1,19 @@
+name: ElytraFixOnCombat
+version: 1.0.0
+main: dev.bhaskar.elytrafix.ElytraFixOnCombat
+api-version: '1.21'
+description: Prevents elytra use during CombatLogX combat.
+authors: [bhaskar]
+softdepend: [CombatLogX]
+commands:
+  elytrafix:
+    description: Main command for ElytraFixOnCombat.
+    aliases: [efx]
+    usage: /<command> reload
+permissions:
+  elytrafix.bypass:
+    description: Bypass all elytra restrictions during combat.
+    default: op
+  elytrafix.admin:
+    description: Access to admin commands.
+    default: op
