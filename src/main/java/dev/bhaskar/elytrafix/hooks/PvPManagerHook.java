@@ -1,10 +1,10 @@
 package dev.bhaskar.elytrafix.hooks;
 
-import me.NoChance.PvPManager.PvPManager;
-import me.NoChance.PvPManager.Managers.PlayerHandler;
-import me.NoChance.PvPManager.Player;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.Method;
 
 public final class PvPManagerHook implements CombatStatusHook {
     @Override
@@ -14,16 +14,23 @@ public final class PvPManagerHook implements CombatStatusHook {
     }
 
     @Override
-    public boolean isInCombat(org.bukkit.entity.Player player) {
+    public boolean isInCombat(Player player) {
         if (!isAvailable()) {
             return false;
         }
-        PlayerHandler handler = PvPManager.getPlayerHandler();
-        if (handler == null) {
+        try {
+            Class<?> combatPlayerClass = Class.forName("me.chancesd.pvpmanager.player.CombatPlayer");
+            Method getMethod = combatPlayerClass.getMethod("get", Player.class);
+            Object combatPlayer = getMethod.invoke(null, player);
+            if (combatPlayer == null) {
+                return false;
+            }
+            Method inCombatMethod = combatPlayerClass.getMethod("isInCombat");
+            Object result = inCombatMethod.invoke(combatPlayer);
+            return result instanceof Boolean && (Boolean) result;
+        } catch (ReflectiveOperationException ignored) {
             return false;
         }
-        Player pvpPlayer = handler.get(player);
-        return pvpPlayer != null && pvpPlayer.isInCombat();
     }
 
     @Override
