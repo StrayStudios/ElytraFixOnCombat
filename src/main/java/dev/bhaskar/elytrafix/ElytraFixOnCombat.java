@@ -1,7 +1,9 @@
 package dev.bhaskar.elytrafix;
 
 import dev.bhaskar.elytrafix.config.ConfigManager;
+import dev.bhaskar.elytrafix.hooks.CombatHookManager;
 import dev.bhaskar.elytrafix.hooks.CombatLogXHook;
+import dev.bhaskar.elytrafix.hooks.PvPManagerHook;
 import dev.bhaskar.elytrafix.listeners.ListenerCombatTag;
 import dev.bhaskar.elytrafix.listeners.ListenerEquip;
 import dev.bhaskar.elytrafix.listeners.ListenerFirework;
@@ -27,14 +29,14 @@ public final class ElytraFixOnCombat extends JavaPlugin implements TabExecutor {
     private final List<Listener> activeListeners = new ArrayList<>();
 
     private ConfigManager configManager;
-    private CombatLogXHook combatLogXHook;
+    private CombatHookManager combatHookManager;
     private DropProtectionManager dropProtectionManager;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
-        this.combatLogXHook = new CombatLogXHook();
+        this.combatHookManager = new CombatHookManager(List.of(new CombatLogXHook(), new PvPManagerHook()));
         this.dropProtectionManager = new DropProtectionManager(this);
 
         PluginCommand command = getCommand("elytrafix");
@@ -43,11 +45,11 @@ public final class ElytraFixOnCombat extends JavaPlugin implements TabExecutor {
             command.setTabCompleter(this);
         }
 
-        if (combatLogXHook.isAvailable()) {
-            getLogger().info("[ElytraFixOnCombat] Hooked into CombatLogX successfully.");
+        if (combatHookManager.hasAnyAvailableHook()) {
+            getLogger().info("[ElytraFixOnCombat] Hooked into " + combatHookManager.getAvailableHookNames() + " successfully.");
             registerConfiguredListeners();
         } else {
-            getLogger().warning("[ElytraFixOnCombat] CombatLogX not found — all features disabled.");
+            getLogger().warning("[ElytraFixOnCombat] CombatLogX/PvPManager not found — all features disabled.");
         }
 
         dropProtectionManager.startCleanupTask();
@@ -71,13 +73,13 @@ public final class ElytraFixOnCombat extends JavaPlugin implements TabExecutor {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         if (configManager.isBlockGliding()) {
-            Listener listener = new ListenerGlide(configManager, combatLogXHook);
+            Listener listener = new ListenerGlide(configManager, combatHookManager);
             pluginManager.registerEvents(listener, this);
             activeListeners.add(listener);
         }
 
         if (configManager.isBlockFireworks() || configManager.getFireworkPowerLimit() >= 1) {
-            Listener listener = new ListenerFirework(configManager, combatLogXHook);
+            Listener listener = new ListenerFirework(configManager, combatHookManager);
             pluginManager.registerEvents(listener, this);
             activeListeners.add(listener);
         }
@@ -92,7 +94,7 @@ public final class ElytraFixOnCombat extends JavaPlugin implements TabExecutor {
         }
 
         if (configManager.isBlockEquippingElytra()) {
-            Listener listener = new ListenerEquip(configManager, combatLogXHook);
+            Listener listener = new ListenerEquip(configManager, combatHookManager);
             pluginManager.registerEvents(listener, this);
             activeListeners.add(listener);
         }
@@ -114,7 +116,7 @@ public final class ElytraFixOnCombat extends JavaPlugin implements TabExecutor {
             }
 
             configManager.reload();
-            if (combatLogXHook.isAvailable()) {
+            if (combatHookManager.hasAnyAvailableHook()) {
                 registerConfiguredListeners();
             } else {
                 unregisterConfiguredListeners();

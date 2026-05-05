@@ -1,7 +1,7 @@
 package dev.bhaskar.elytrafix.listeners;
 
 import dev.bhaskar.elytrafix.config.ConfigManager;
-import dev.bhaskar.elytrafix.hooks.CombatLogXHook;
+import dev.bhaskar.elytrafix.hooks.CombatHookManager;
 import dev.bhaskar.elytrafix.util.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,11 +20,11 @@ public final class ListenerGlide implements Listener {
     private static final int THRESHOLD = 3;
 
     private final ConfigManager config;
-    private final CombatLogXHook hook;
+    private final CombatHookManager hook;
     private final Map<UUID, Integer> attempts = new HashMap<>();
     private final Map<UUID, Long> lastAttempt = new HashMap<>();
 
-    public ListenerGlide(ConfigManager config, CombatLogXHook hook) {
+    public ListenerGlide(ConfigManager config, CombatHookManager hook) {
         this.config = config;
         this.hook = hook;
     }

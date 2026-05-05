@@ -1,7 +1,7 @@
 package dev.bhaskar.elytrafix.listeners;
 
 import dev.bhaskar.elytrafix.config.ConfigManager;
-import dev.bhaskar.elytrafix.hooks.CombatLogXHook;
+import dev.bhaskar.elytrafix.hooks.CombatHookManager;
 import dev.bhaskar.elytrafix.util.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,9 +16,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public final class ListenerFirework implements Listener {
     private final ConfigManager config;
-    private final CombatLogXHook hook;
+    private final CombatHookManager hook;
 
-    public ListenerFirework(ConfigManager config, CombatLogXHook hook) {
+    public ListenerFirework(ConfigManager config, CombatHookManager hook) {
         this.config = config;
         this.hook = hook;
     }

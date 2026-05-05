@@ -6,12 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public final class CombatLogXHook {
+public final class CombatLogXHook implements CombatStatusHook {
+    @Override
     public boolean isAvailable() {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("CombatLogX");
         return plugin instanceof ICombatLogX && plugin.isEnabled();
     }
 
+    @Override
     public boolean isInCombat(Player player) {
         Plugin clx = Bukkit.getPluginManager().getPlugin("CombatLogX");
         if (!(clx instanceof ICombatLogX combatLogX) || !clx.isEnabled()) {
@@ -20,4 +22,10 @@ public final class CombatLogXHook {
         ICombatManager manager = combatLogX.getCombatManager();
         return manager != null && manager.isInCombat(player);
     }
+
+    @Override
+    public String getHookName() {
+        return "CombatLogX";
+    }
 }
+

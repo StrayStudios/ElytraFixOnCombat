@@ -1,7 +1,7 @@
 package dev.bhaskar.elytrafix.listeners;
 
 import dev.bhaskar.elytrafix.config.ConfigManager;
-import dev.bhaskar.elytrafix.hooks.CombatLogXHook;
+import dev.bhaskar.elytrafix.hooks.CombatHookManager;
 import dev.bhaskar.elytrafix.util.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,9 +20,9 @@ public final class ListenerEquip implements Listener {
     private static final int PLAYER_CHEST_SLOT = 38;
 
     private final ConfigManager config;
-    private final CombatLogXHook hook;
+    private final CombatHookManager hook;
 
-    public ListenerEquip(ConfigManager config, CombatLogXHook hook) {
+    public ListenerEquip(ConfigManager config, CombatHookManager hook) {
         this.config = config;
         this.hook = hook;
     }
